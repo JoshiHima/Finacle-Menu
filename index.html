@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Finacle Menu Form</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .error {
+            color: red;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="form-container" id="formContainer"></div>
+    <div id="finalSuccess">Data Entered Successfully!</div>
+    <!-- <link rel="stylesheet" href="script.js"> -->
+
+    <script language="JavaScript1.1">
+        // Create form HTML inside JS
+        var formHtml = `
+            <div id="functionPage" class="section">
+                <h2>Function</h2>
+                <div class="form-column">
+                    <label for="function">Function</label>
+                    <select id="function" name="function">
+                        <option value="">Select Function</option>
+                        <option value="add">Add</option>
+                        <option value="inquiry">Inquiry</option>
+                        <option value="delete">Delete</option>
+                        <option value="verify">Verify</option>
+                        <option value="modify">Modify</option>
+                    </select>
+                    <div id="functionError" class="error"></div><br>
+                    <label for="schemeCode">Scheme Code</label><input type="text" id="schemeCode" name="schemeCode" placeholder="Enter Scheme Code"><div id="schemeCodeError" class="error"></div><br>
+                </div>
+                <div class="form-column">
+                    <label for="productId">Product ID</label><input type="text" id="productId" name="productId" placeholder="Enter Product ID"><div id="productIdError" class="error"></div><br>
+                    <label for="schemeType">Scheme Type</label>
+                        <select id="schemeType" name="schemeType">
+                            <option value="">Select Scheme Type</option>
+                            <option value="SBA">SBA - Savings Bank Account</option>
+                            <option value="CAA">CAA - Current Account</option>
+                            <option value="TDA">TDA - Term Deposit Account</option>
+                            <option value="ODA">ODA - Overdraft Account</option>
+                            <option value="CCA">CCA - Cash Credit Account</option>
+                        </select>
+                        <div id="schemeTypeError" class="error"></div><br>
+                </div>
+                <div class="clear"></div>
+                <input type="button" value="Go" onclick="validateFunction()">
+                <input type="button" value="Clear" onclick="clearFunction()">
+                <div id="functionSuccess" class="success-message">Data Submitted Successfully!</div>
+            </div>
+
+            <div class="tab" id="tabContainer" style="display: none;">
+                <button class="tablinks" onclick="openSection(event, 'scheme')">Scheme</button>
+                <button class="tablinks" onclick="openSection(event, 'dormat')">Dormat</button>
+                <button class="tablinks" onclick="openSection(event, 'section4')">Interest</button>
+                <button class="tablinks" onclick="openSection(event, 'asset')">Assets</button>
+            </div>
+
+            <form id="myForm">
+                <div class="section" id="scheme">
+                    <h2>Scheme</h2>
+                    <div class="form-column">
+                        <label for="setId">Set ID</label><input type="text" id="setId" name="setId" placeholder="Enter Set ID"><div id="setIdError" class="error"></div><br>
+                        <label for="natureOfScheme">Nature of Scheme</label>
+                        <input type="checkbox" id="conventional" name="natureOfScheme" value="Conventional"><label for="conventional">Conventional</label>
+                        <input type="checkbox" id="islamic" name="natureOfScheme" value="Islamic"><label for="islamic">Islamic</label><div id="natureOfSchemeError" class="error"></div><br>
+                        <label for="additionalCalendarBase">Additional Calendar Base</label>
+                        <input type="checkbox" id="hijri" name="additionalCalendarBase" value="Hijri"><label for="hijri">Hijri</label>
+                        <input type="checkbox" id="none" name="additionalCalendarBase" value="None"><label for="none">None</label><div id="additionalCalendarBaseError" class="error"></div><br>
+                        <label for="expiryDate">Expiry Date</label><input type="text" id="expiryDate" name="expiryDate" placeholder="MM-DD-YYYY"><div id="expiryDateError" class="error"></div><br>
+                        <label for="transactionRestriction">Transaction Restriction</label><input type="text" id="transactionRestriction" name="transactionRestriction" placeholder="Enter Restriction"><div id="transactionRestrictionError" class="error"></div><br>
+                        <label for="acIdGeneration">A/c. ID Generation</label><input type="text" id="acIdGeneration" name="acIdGeneration" placeholder="Enter A/c. ID Generation"><div id="acIdGenerationError" class="error"></div><br>
+                        <label for="sequence">Sequence</label><input type="text" id="sequence" name="sequence" placeholder="Enter Sequence"><div id="sequenceError" class="error"></div><br>
+                        <label for="minPostingWorkClass">Min. Posting Work Class</label><input type="text" id="minPostingWorkClass" name="minPostingWorkClass" placeholder="Enter Min. Posting Work Class"><div id="minPostingWorkClassError" class="error"></div><br>
+                        <label for="productConcept">Product Concept</label><input type="text" id="productConcept" name="productConcept" placeholder="Enter Product Concept"><div id="productConceptError" class="error"></div><br>
+                        <label for="schemeSupervisorId">Scheme Supervisor ID</label><input type="text" id="schemeSupervisorId" name="schemeSupervisorId" placeholder="Enter Supervisor ID"><div id="schemeSupervisorIdError" class="error"></div><br>
+                        <label for="acDetails">A/c. Details</label>
+                        <select id="acDetails" name="acDetails">
+                            <option value="FCNR">FCNR</option>
+                            <option value="EEFC">EEFC</option>
+                            <option value="Staff Scheme">Staff Scheme</option>
+                            <option value="A/c. Closure across SOL">A/c. Closure across SOL</option>
+                        </select><div id="acDetailsError" class="error"></div><br>
+                        <label>Product Eligibility Criteria Details</label>
+                        <input type="text" id="productEligibilityCriteria" name="productEligibilityCriteria" placeholder="Enter Details"><div id="productEligibilityCriteriaError" class="error"></div><br>
+                        <label for="minAge">Min Age</label><input type="text" id="minAge" name="minAge" placeholder="Enter Min Age"><div id="minAgeError" class="error"></div><br>
+                        <label for="languagePreference" style="background-color: blue; color: white;">Language Preference</label><input type="text" id="languagePreference" name="languagePreference" placeholder="Enter Language Preference"><div id="languagePreferenceError" class="error"></div><br>
+                        <label for="preferredLanguageCode">Preferred Language Code</label><input type="text" id="preferredLanguageCode" name="preferredLanguageCode" placeholder="Enter Preferred Language Code"><div id="preferredLanguageCodeError" class="error"></div><br>
+                    </div>
+                    <div class="form-column">
+                        <label for="productType">Product Type</label><input type="text" id="productType" name="productType" placeholder="Enter Product Type"><div id="productTypeError" class="error"></div><br>
+                        <label for="effectiveDate">Effective Date</label><input type="text" id="effectiveDate" name="effectiveDate" placeholder="MM-DD-YYYY"><div id="effectiveDateError" class="error"></div><br>
+                        <label for="schemeName">Scheme Name</label><input type="text" id="schemeName" name="schemeName" placeholder="Enter Scheme Name"><div id="schemeNameError" class="error"></div><br>
+                        <label for="shortName">Short Name</label><input type="text" id="shortName" name="shortName" placeholder="Enter Short Name"><div id="shortNameError" class="error"></div><br>
+                        <label for="acPrefix">A/c. Prefix</label><input type="text" id="acPrefix" name="acPrefix" placeholder="Enter A/c. Prefix"><div id="acPrefixError" class="error"></div><br>
+                        <label for="nonresident">Nonresident</label>
+                        <span class="checkbox-group"><input type="checkbox" id="yes" name="nonresident" value="Yes"><label for="yes">Yes</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="no" name="nonresident" value="No"><label for="no">No</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="both" name="nonresident" value="Both"><label for="both">Both</label></span><div id="nonresidentError" class="error"></div><br>
+                        <label for="productGroup">Product Group</label><input type="text" id="productGroup" name="productGroup" placeholder="Enter Product Group"><div id="productGroupError" class="error"></div><br>
+                        <label for="pdGeneralLedgerSubhead">PD General Ledger Subhead</label><input type="text" id="pdGeneralLedgerSubhead" name="pdGeneralLedgerSubhead" placeholder="Enter PD General Ledger Subhead"><div id="pdGeneralLedgerSubheadError" class="error"></div><br>
+                        <label for="transactionDetails">Transaction Details</label>
+                        <select id="transactionDetails" name="transactionDetails">
+                            <option value="Report Transaction">Report Transaction</option>
+                            <option value="Transaction Ref. No.">Transaction Ref. No.</option>
+                            <option value="Link Transaction to Purchase or Sale">Link Transaction to Purchase or Sale</option>
+                        </select><div id="transactionDetailsError" class="error"></div><br>
+                        <label for="maxAge">Max. Age</label><input type="text" id="maxAge" name="maxAge" placeholder="Enter Max Age"><div id="maxAgeError" class="error"></div><br>
+                        <label for="schemeNamePreferred">Scheme Name in Preferred Language</label><input type="text" id="schemeNamePreferred" name="schemeNamePreferred" placeholder="Enter Scheme Name in Preferred Language"><div id="schemeNamePreferredError" class="error"></div><br>
+                        <label for="schemeShortNamePreferred">Scheme Short Name in Preferred Language</label><input type="text" id="schemeShortNamePreferred" name="schemeShortNamePreferred" placeholder="Enter Scheme Short Name in Preferred Language"><div id="schemeShortNamePreferredError" class="error"></div><br>
+                    </div>
+                    <div class="clear"></div>
+                    <input type="button" value="Go" onclick="validateSection2()">
+                    <input type="button" value="Clear" onclick="clearSection2()">
+                    <input type="button" value="Validate" style="background-color: blue; color: white; cursor: pointer; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#004d99';" onmouseout="this.style.backgroundColor='blue';" onclick="validate()">
+                    <div id="section2Success" class="success-message">Data Submitted Successfully!</div>
+                </div>
+
+                <div class="section" id="dormat">
+                    <h2>Dormat</h2>
+                    <div class="form-column">
+                        <label for="noOfWithdrawals">No. of Withdrawals</label><input type="text" id="noOfWithdrawals" name="noOfWithdrawals" placeholder="Enter Number"><div id="noOfWithdrawalsError" class="error"></div><br>
+                        <label for="minBalanceWithCheque">Min. Balance with Cheque</label><input type="text" id="minBalanceWithCheque" name="minBalanceWithCheque" placeholder="Enter Number"><div id="minBalanceWithChequeError" class="error"></div><br>
+                        <label for="ledgerFolioFee">Ledger Folio Fee / Folio</label><input type="text" id="ledgerFolioFee" name="ledgerFolioFee" placeholder="Enter Number"><div id="ledgerFolioFeeError" class="error"></div><br>
+                        <label for="inactiveAcAbnormalTransactionLimit">Inactive A/c. Abnormal Transaction Limit</label><input type="text" id="inactiveAcAbnormalTransactionLimit" name="inactiveAcAbnormalTransactionLimit" placeholder="Enter Number"><div id="inactiveAcAbnormalTransactionLimitError" class="error"></div><br>
+                        <label for="durationToMarkAsInactive">Duration to Mark A/c. as Inactive (Months)</label><input type="text" id="durationToMarkAsInactive" name="durationToMarkAsInactive" placeholder="Enter Months"><div id="durationToMarkAsInactiveError" class="error"></div><br>
+                        <label for="dormatFee">Dormat Fee</label><input type="text" id="dormatFee" name="dormatFee" placeholder="Enter Fee"><div id="dormatFeeError" class="error"></div><br>
+                        <label for="interestCalcBasedOnLocalCalendar">Interest Calculation Based on Local Calendar</label>
+                        <span class="checkbox-group"><input type="checkbox" id="yesInterestCalc" name="interestCalcBasedOnLocalCalendar" value="Yes"><label for="yesInterestCalc">Yes</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="noInterestCalc" name="interestCalcBasedOnLocalCalendar" value="No"><label for="noInterestCalc">No</label></span><div id="interestCalcBasedOnLocalCalendarError" class="error"></div><br>
+                        <label for="interestMethodDr">Interest Method (Dr.)</label>
+                        <select id="interestMethodDr" name="interestMethodDr">
+                            <option value="E">E - EOD Clear Balance</option>
+                        </select><div id="interestMethodDrError" class="error"></div><br>
+                        <label for="fromBalanceDate">From Balance Date</label>
+                        <select id="fromBalanceDate" name="fromBalanceDate">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </select><div id="fromBalanceDateError" class="error"></div><br>
+                        <label for="allow">Allow</label>
+                        <span class="checkbox-group"><input type="checkbox" id="allow" name="allow" value="Sweeps"><label for="sweeps">Sweeps</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="allow" name="allow" value="Debit against Unclear Balance"><label for="debitUnclearBalance">Debit against Unclear Balance</label></span><div id="allowError" class="error"></div><br>
+                        <label for="acStatement">A/c. Statement</label>
+                        <select id="acStatement" name="acStatement">
+                            <option value="S">S - Statement</option>
+                        </select><div id="acStatementError" class="error"></div><br>
+                        <label for="dormatFrequencyCode1">Dormat Frequency Code 1</label>
+                        <select id="dormatFrequencyCode1" name="dormatFrequencyCode1">
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="holiday">Holiday</option>
+                        </select><div id="dormatFrequencyCode1Error" class="error"></div><br>
+                        <label for="dormatFrequencyCode2">Dormat Frequency Code 2</label>
+                        <select id="dormatFrequencyCode2" name="dormatFrequencyCode2">
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="holiday">Holiday</option>
+                        </select><div id="dormatFrequencyCode2Error" class="error"></div><br>
+                        <label for="dormatFrequencyCode3">Dormat Frequency Code 3</label>
+                        <select id="dormatFrequencyCode3" name="dormatFrequencyCode3">
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="holiday">Holiday</option>
+                        </select><div id="dormatFrequencyCode3Error" class="error"></div><br>
+                        <label for="dormatFrequencyCode4">Dormat Frequency Code 4</label>
+                        <select id="dormatFrequencyCode4" name="dormatFrequencyCode4">
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="holiday">Holiday</option>
+                        </select><div id="dormatFrequencyCode4Error" class="error"></div><br>
+                        <label for="dormatFrequencyCode5">Dormat Frequency Code 5</label>
+                        <select id="dormatFrequencyCode5" name="dormatFrequencyCode5">
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="holiday">Holiday</option>
+                        </select><div id="dormatFrequencyCode5Error" class="error"></div><br>
+                        <label for="specialSavingsScheme">Special Savings Scheme</label>
+                        <select id="specialSavingsScheme" name="specialSavingsScheme">
+                            <option value="Allowed">Allowed</option>
+                            <option value="Not Allowed">Not Allowed</option>
+                        </select><div id="specialSavingsSchemeError" class="error"></div><br>
+                        <label for="noticeSavingsBankAccountParameters" style="background-color: lightblue; color: black;">Notice Savings Bank Account Parameters</label>
+                        <label for="withdrawalNoticePeriodMonth">Withdrawal Notice Period (Month)</label>
+                        <select id="withdrawalNoticePeriodMonth" name="withdrawalNoticePeriodMonth">
+                            <option value="MMM">MMM</option>
+                        </select><div id="withdrawalNoticePeriodMonthError" class="error"></div><br>
+                        <label for="withdrawalNoticePeriodDay">Withdrawal Notice Period (Day)</label>
+                        <select id="withdrawalNoticePeriodDay" name="withdrawalNoticePeriodDay">
+                            <option value="DDD">DDD</option>
+                        </select><div id="withdrawalNoticePeriodDayError" class="error"></div><br>
+                        <label for="maxNoOfWithdrawalsWithoutNotice">Max. No of Withdrawals without Notice</label><input type="text" id="maxNoOfWithdrawalsWithoutNotice" name="maxNoOfWithdrawalsWithoutNotice" placeholder="Enter Number" ><div id="maxNoOfWithdrawalsWithoutNoticeError" class="error"></div><br>
+                        <label for="withdrawalFrequency">Withdrawal Frequency</label>
+                        <select id="withdrawalFrequency" name="withdrawalFrequency">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select><div id="withdrawalFrequencyError" class="error"></div><br>
+                    </div>
+                    <div class="form-column">
+                        <label for="noInterestIfWithdrawalsExceed">No Interest if Withdrawals Exceed</label>
+                        <span class="checkbox-group"><input type="checkbox" id="noInterestIfWithdrawalsExceed" name="noInterestIfWithdrawalsExceed" value="Yes"><label for="yesNoInterest">Yes</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="noInterestIfWithdrawalsExceed" name="noInterestIfWithdrawalsExceed" value="No"><label for="noNoInterest">No</label></span><div id="noInterestIfWithdrawalsExceedError" class="error"></div><br>
+                        <label for="debitBalanceLimit">Debit Balance Limit</label><input type="text" id="debitBalanceLimit" name="debitBalanceLimit" placeholder="Enter Number"><div id="debitBalanceLimitError" class="error"></div><br>
+                        <label for="feeOrExtraWithdrawal">Fee or Extra Withdrawal</label><input type="text" id="feeOrExtraWithdrawal" name="feeOrExtraWithdrawal" placeholder="Enter Number"><div id="feeOrExtraWithdrawalError" class="error"></div><br>
+                        <label for="dormatAcAbnormalTransactionLimit">Dormat A/c. Abnormal Transaction Limit</label><input type="text" id="dormatAcAbnormalTransactionLimit" name="dormatAcAbnormalTransactionLimit" placeholder="Enter Number"><div id="dormatAcAbnormalTransactionLimitError" class="error"></div><br>
+                        <label for="durationFromInactiveToDormat">Duration from Inactive to Dormat (Months)</label><input type="text" id="durationFromInactiveToDormat" name="durationFromInactiveToDormat" placeholder="Enter Months"><div id="durationFromInactiveToDormatError" class="error"></div><br>
+                        <label for="inactiveFee">Inactive Fee</label><input type="text" id="inactiveFee" name="inactiveFee" placeholder="Enter Fee"><div id="inactiveFeeError" class="error"></div><br>
+                        <label for="interestMethodCr">Interest Method (Cr.)</label>
+                        <select id="interestMethodCr" name="interestMethodCr">
+                            <option value="M">M - Min</option>
+                        </select><div id="interestMethodCrError" class="error"></div><br>
+                        <label for="toBalanceDate">To Balance Date</label>
+                        <select id="toBalanceDate" name="toBalanceDate">
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                            <option value="40">40</option>
+                            <option value="50">50</option>
+                        </select><div id="toBalanceDateError" class="error"></div><br>
+                        <label for="noOfNomineesAllowed">No. of Nominees Allowed</label><input type="text" id="noOfNomineesAllowed" name="noOfNomineesAllowed" placeholder="Enter Number"><div id="noOfNomineesAllowedError" class="error"></div><br>
+                        <label for="statementFrequency1">Statement Frequency 1</label>
+                        <select id="statementFrequency1" name="statementFrequency1">
+                            <option value="D">D - Daily</option>
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="P">P - Previous date</option>
+                        </select><div id="statementFrequency1Error" class="error"></div><br>
+                        <label for="statementFrequency2">Statement Frequency 2</label>
+                        <select id="statementFrequency2" name="statementFrequency2">
+                            <option value="D">D - Daily</option>
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="P">P - Previous date</option>
+                        </select><div id="statementFrequency2Error" class="error"></div><br>
+                        <label for="statementFrequency3">Statement Frequency 3</label>
+                        <select id="statementFrequency3" name="statementFrequency3">
+                            <option value="D">D - Daily</option>
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="P">P - Previous date</option>
+                        </select><div id="statementFrequency3Error" class="error"></div><br>
+                        <label for="statementFrequency4">Statement Frequency 4</label>
+                        <select id="statementFrequency4" name="statementFrequency4">
+                            <option value="D">D - Daily</option>
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="P">P - Previous date</option>
+                        </select><div id="statementFrequency4Error" class="error"></div><br>
+                        <label for="statementFrequency5">Statement Frequency 5</label>
+                        <select id="statementFrequency5" name="statementFrequency5">
+                            <option value="D">D - Daily</option>
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="P">P - Previous date</option>
+                        </select><div id="statementFrequency5Error" class="error"></div><br>
+                        <label for="statementFrequency6">Statement Frequency 6</label>
+                        <select id="statementFrequency6" name="statementFrequency6">
+                            <option value="D">D - Daily</option>
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="P">P - Previous date</option>
+                        </select><div id="statementFrequency6Error" class="error"></div><br>
+                        <label for="inactiveFrequencyCode1">Inactive Frequency Code 1</label>
+                        <select id="inactiveFrequencyCode1" name="inactiveFrequencyCode1">
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="holiday">Holiday</option>
+                        </select><div id="inactiveFrequencyCode1Error" class="error"></div><br>
+                        <label for="inactiveFrequencyCode2">Inactive Frequency Code 2</label>
+                        <select id="inactiveFrequencyCode2" name="inactiveFrequencyCode2">
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="holiday">Holiday</option>
+                        </select><div id="inactiveFrequencyCode2Error" class="error"></div><br>
+                        <label for="inactiveFrequencyCode3">Inactive Frequency Code 3</label>
+                        <select id="inactiveFrequencyCode3" name="inactiveFrequencyCode3">
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="holiday">Holiday</option>
+                        </select><div id="inactiveFrequencyCode3Error" class="error"></div><br>
+                        <label for="inactiveFrequencyCode4">Inactive Frequency Code 4</label>
+                        <select id="inactiveFrequencyCode4" name="inactiveFrequencyCode4">
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="holiday">Holiday</option>
+                        </select><div id="inactiveFrequencyCode4Error" class="error"></div><br>
+                        <label for="inactiveFrequencyCode5">Inactive Frequency Code 5</label>
+                        <select id="inactiveFrequencyCode5" name="inactiveFrequencyCode5">
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="holiday">Holiday</option>
+                        </select><div id="inactiveFrequencyCode5Error" class="error"></div><br>
+                        <label for="specialSavingsAcSubcategory">Special Savings A/c. Subcategory</label><input type="text" id="specialSavingsAcSubcategory" name="specialSavingsAcSubcategory" placeholder="Enter Subcategory"><div id="specialSavingsAcSubcategoryError" class="error"></div><br>
+                        <label for="closureNoticePeriodMonth">Closure Notice Period (Month)</label>
+                        <select id="closureNoticePeriodMonth" name="closureNoticePeriodMonth">
+                            <option value="MMM">MMM</option>
+                        </select><div id="closureNoticePeriodMonthError" class="error"></div><br>
+                        <label for="closureNoticePeriodDay">Closure Notice Period (Day)</label>
+                        <select id="closureNoticePeriodDay" name="closureNoticePeriodDay">
+                            <option value="DDD">DDD</option>
+                        </select><div id="closureNoticePeriodDayError" class="error"></div><br>
+                        <label for="maxWithdrawalAmtWithoutNotice">Max. Withdrawal Amt. without Notice</label><input type="text" id="maxWithdrawalAmtWithoutNotice" name="maxWithdrawalAmtWithoutNotice" placeholder="Enter Amount"><div id="maxWithdrawalAmtWithoutNoticeError" class="error"></div><br>
+                    </div>
+                    <div class="clear"></div>
+                    <input type="button" value="Go" onclick="validateSection3()">
+                    <input type="button" value="Clear" onclick="clearSection3()">
+                    <input type="button" value="Validate" style="background-color: blue; color: white; cursor: pointer; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#004d99';" onmouseout="this.style.backgroundColor='blue';" onclick="validate()">
+                    <div id="section3Success" class="success-message">Data Submitted Successfully!</div>
+                </div>
+
+                <div class="section" id="section4">
+                    <h2>Interest</h2>
+                    <div class="form-column">
+                        <label for="transactionCode">Transaction Code</label><input type="text" id="transactionCode" name="transactionCode" placeholder="Enter Transaction Code"><div id="transactionCodeError" class="error"></div><br>
+                        <label for="amount">Amount</label><input type="number" id="amount" name="amount" placeholder="Enter Amount"><div id="amountError" class="error"></div><br>
+                        <label for="transactionDate">Transaction Date</label><input type="text" id="transactionDate" name="transactionDate" placeholder="MM-DD-YYYY"><div id="transactionDateError" class="error"></div><br>
+                        <label for="description">Description</label><input type="text" id="description" name="description" placeholder="Enter Description"><div id="descriptionError" class="error"></div><br>
+                        <label for="plAccountCcy">P&L A/c. CCY</label>
+                        <span class="checkbox-group"><input type="checkbox" id="accCcy" name="plAccountCcy" value="A/c. CCY"><label for="accCcy">A/c. CCY</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="homeCcy" name="plAccountCcy" value="Home CCY"><label for="homeCcy">Home CCY</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="bookingAccCcy" name="plAccountCcy" value="Booking in A/c. CCY and P&L in Home CCY"><label for="bookingAccCcy">Booking in A/c. CCY and P&L in Home CCY</label></span><div id="plAccountCcyError" class="error"></div><br>
+                        <label for="interestPayable">Interest Payable</label>
+                        <span class="checkbox-group"><input type="checkbox" id="yesPayable" name="interestPayable" value="Yes"><label for="yesPayable">Yes</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="noPayable" name="interestPayable" value="No"><label for="noPayable">No</label></span><div id="interestPayableError" class="error"></div><br>
+                        <label for="interestReceivable">Interest Receivable</label>
+                        <span class="checkbox-group"><input type="checkbox" id="yesReceivable" name="interestReceivable" value="Yes"><label for="yesReceivable">Yes</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="noReceivable" name="interestReceivable" value="No"><label for="noReceivable">No</label></span><div id="interestReceivableError" class="error"></div><br>
+                        <label for="pastInterestPlaceholder">Past Interest Placeholder</label><input type="number" id="pastInterestPlaceholder" name="pastInterestPlaceholder" placeholder="Enter Number"><div id="pastInterestPlaceholderError" class="error"></div><br>
+                        <label for="pastDueInterestPlaceholder">Past Due Interest Placeholder</label><input type="number" id="pastDueInterestPlaceholder" name="pastDueInterestPlaceholder" placeholder="Enter Number"><div id="pastDueInterestPlaceholderError" class="error"></div><br>
+                        <label for="serviceFee">Service Fee</label>
+                        <span class="checkbox-group"><input type="checkbox" id="yesServiceFee" name="serviceFee" value="Yes"><label for="yesServiceFee">Yes</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="noServiceFee" name="serviceFee" value="No"><label for="noServiceFee">No</label></span><div id="serviceFeeError" class="error"></div><br>
+                        <label for="plNormalInterestPaid">P&L A/c. Normal Interest Paid</label><input type="number" id="plNormalInterestPaid" name="plNormalInterestPaid" placeholder="Enter Number"><div id="plNormalInterestPaidError" class="error"></div><br>
+                        <label for="plPenalInterestPaid">P&L A/c. Penal Interest Paid</label><input type="number" id="plPenalInterestPaid" name="plPenalInterestPaid" placeholder="Enter Number"><div id="plPenalInterestPaidError" class="error"></div><br>
+                        <label for="overdueInterestPayable">Overdue Interest Payable A/c. Term Deposits</label><input type="text" id="overdueInterestPayable" name="overdueInterestPayable" placeholder="Enter A/c"><div id="overdueInterestPayableError" class="error"></div><br>
+                        <label for="parkingStopInterestRecalcDr">Parking A/c. Stop Interest Recalculation (Dr.)</label>
+                        <span class="checkbox-group"><input type="checkbox" id="yesStopDr" name="parkingStopInterestRecalcDr" value="Yes"><label for="yesStopDr">Yes</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="noStopDr" name="parkingStopInterestRecalcDr" value="No"><label for="noStopDr">No</label></span><div id="parkingStopInterestRecalcDrError" class="error"></div><br>
+                        <label for="interestCompoundingFreqDr">Interest Compounding Frequency (Dr.)</label>
+                        <select id="interestCompoundingFreqDr" name="interestCompoundingFreqDr">
+                            <option value="N">N - No Compounding</option>
+                        </select><div id="interestCompoundingFreqDrError" class="error"></div><br>
+                        <label for="bookingTransactionScript">Booking Transaction Script</label><input type="text" id="bookingTransactionScript" name="bookingTransactionScript" placeholder="Enter Script"><div id="bookingTransactionScriptError" class="error"></div><br>
+                        <label for="interestTransactionScript">Interest Transaction Script</label><input type="text" id="interestTransactionScript" name="interestTransactionScript" placeholder="Enter Script"><div id="interestTransactionScriptError" class="error"></div><br>
+                        <label for="interestCalcFreqDr1">Interest Calculation Frequency (Dr.) 1</label>
+                        <select id="interestCalcFreqDr1" name="interestCalcFreqDr1">
+                            <option value="">Select</option>
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="holiday">Holiday</option>
+                            <option value="select">Select</option>
+                        </select><div id="interestCalcFreqDr1Error" class="error"></div><br>
+                        <label for="interestCalcFreqDr2">Interest Calculation Frequency (Dr.) 2</label>
+                        <select id="interestCalcFreqDr2" name="interestCalcFreqDr2">
+                            <option value="">Select</option>
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="holiday">Holiday</option>
+                            <option value="select">Select</option>
+                        </select><div id="interestCalcFreqDr2Error" class="error"></div><br>
+                        <label for="interestCalcFreqDr3">Interest Calculation Frequency (Dr.) 3</label>
+                        <select id="interestCalcFreqDr3" name="interestCalcFreqDr3">
+                            <option value="">Select</option>
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="holiday">Holiday</option>
+                            <option value="select">Select</option>
+                        </select><div id="interestCalcFreqDr3Error" class="error"></div><br>
+                        <label for="interestCalcFreqDr4">Interest Calculation Frequency (Dr.) 4</label>
+                        <select id="interestCalcFreqDr4" name="interestCalcFreqDr4">
+                            <option value="">Select</option>
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="holiday">Holiday</option>
+                            <option value="select">Select</option>
+                        </select><div id="interestCalcFreqDr4Error" class="error"></div><br>
+                        <label for="interestCalcFreqDr5">Interest Calculation Frequency (Dr.) 5</label>
+                        <select id="interestCalcFreqDr5" name="interestCalcFreqDr5">
+                            <option value="">Select</option>
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="holiday">Holiday</option>
+                            <option value="select">Select</option>
+                        </select><div id="interestCalcFreqDr5Error" class="error"></div><br>
+                        <label for="interestCalcFreqDr6">Interest Calculation Frequency (Dr.) 6</label>
+                        <select id="interestCalcFreqDr6" name="interestCalcFreqDr6">
+                            <option value="">Select</option>
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="holiday">Holiday</option>
+                            <option value="select">Select</option>
+                        </select><div id="interestCalcFreqDr6Error" class="error"></div><br>
+                        <label for="interestOptions">Interest Options</label>
+                        <span class="checkbox-group"><input type="checkbox" id="mergeInterest" name="interestOptions" value="Merge Interest Part Transactions"><label for="mergeInterest">Merge Interest Part Transactions</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="insufficientFunds" name="interestOptions" value="Apply Interest when Operative A/c has insufficient Funds"><label for="insufficientFunds">Apply Interest when Operative A/c has insufficient Funds</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="limitLevel" name="interestOptions" value="Limit Level Interest"><label for="limitLevel">Limit Level Interest</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="qisNonSubmission" name="interestOptions" value="Interest on Nonsubmission of QIS"><label for="qisNonSubmission">Interest on Nonsubmission of QIS</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="stockNonSubmission" name="interestOptions" value="Interest on Nonsubmission of Stock Statement"><label for="stockNonSubmission">Interest on Nonsubmission of Stock Statement</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="discountedRate" name="interestOptions" value="Apply Discounted Interest Rate or Debt"><label for="discountedRate">Apply Discounted Interest Rate or Debt</label></span><div id="interestOptionsError" class="error"></div><br>
+                        <label for="pegInterestToAc">Peg Interest to A/c.</label>
+                        <span class="checkbox-group"><input type="checkbox" id="yesPegAc" name="pegInterestToAc" value="Yes"><label for="yesPegAc">Yes</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="noPegAc" name="pegInterestToAc" value="No"><label for="noPegAc">No</label></span><div id="pegInterestToAcError" class="error"></div><br>
+                        <label for="pegReviewCustomer">Peg Review Customer Preferential from Customer Master</label>
+                        <span class="checkbox-group"><input type="checkbox" id="yesPegReview" name="pegReviewCustomer" value="Yes"><label for="yesPegReview">Yes</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="noPegReview" name="pegReviewCustomer" value="No"><label for="noPegReview">No</label></span><div id="pegReviewCustomerError" class="error"></div><br>
+                        <label for="debitCompoundingRest">Debit Compounding Rest Indicator</label>
+                        <span class="checkbox-group"><input type="checkbox" id="monthDebit" name="debitCompoundingRest" value="Month"><label for="monthDebit">Month</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="monthEndDebit" name="debitCompoundingRest" value="Month End"><label for="monthEndDebit">Month End</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="acOpeningDateDebit" name="debitCompoundingRest" value="A/c. Opening Date"><label for="acOpeningDateDebit">A/c. Opening Date</label></span><div id="debitCompoundingRestError" class="error"></div><br>
+                        <label for="transferInterestDetails">Transfer Interest Details</label>
+                        <span class="checkbox-group"><input type="checkbox" id="noneTransfer" name="transferInterestDetails" value="None"><label for="noneTransfer">None</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="noTransfer" name="transferInterestDetails" value="No"><label for="noTransfer">No</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="yesTransfer" name="transferInterestDetails" value="Yes"><label for="yesTransfer">Yes</label></span><div id="transferInterestDetailsError" class="error"></div><br>
+                    </div>
+                    <div class="form-column">
+                        <label for="acPlaceholder1">A/c. Placeholder</label><input type="text" id="acPlaceholder1" name="acPlaceholder1" placeholder="Enter A/c"><div id="acPlaceholder1Error" class="error"></div><br>
+                        <label for="pastDueInterestPlaceholder2">Past Due Interest Placeholder</label><input type="number" id="pastDueInterestPlaceholder2" name="pastDueInterestPlaceholder2" placeholder="Enter Number"><div id="pastDueInterestPlaceholder2Error" class="error"></div><br>
+                        <label for="acPlaceholder2">A/c. Placeholder</label><input type="text" id="acPlaceholder2" name="acPlaceholder2" placeholder="Enter A/c"><div id="acPlaceholder2Error" class="error"></div><br>
+                        <label for="plNormalInterestReceived">P&L A/c. Normal Interest Received</label><input type="number" id="plNormalInterestReceived" name="plNormalInterestReceived" placeholder="Enter Number"><div id="plNormalInterestReceivedError" class="error"></div><br>
+                        <label for="interestParkingPriorTax">Interest Parking A/c. prior to Tax Deducted at Source</label><input type="text" id="interestParkingPriorTax" name="interestParkingPriorTax" placeholder="Enter A/c"><div id="interestParkingPriorTaxError" class="error"></div><br>
+                        <label for="plOverdueInterestTD">P&L A/c. Overdue Interest - Term Deposits</label><input type="number" id="plOverdueInterestTD" name="plOverdueInterestTD" placeholder="Enter Number"><div id="plOverdueInterestTDError" class="error"></div><br>
+                        <label for="advanceInterestAv">Advance Interest A/v.</label><input type="text" id="advanceInterestAv" name="advanceInterestAv" placeholder="Enter A/c"><div id="advanceInterestAvError" class="error"></div><br>
+                        <label for="stopInterestRecalcCr">Stop Interest Recalculation (Cr.)</label>
+                        <span class="checkbox-group"><input type="checkbox" id="yesStopCr" name="stopInterestRecalcCr" value="Yes"><label for="yesStopCr">Yes</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="noStopCr" name="stopInterestRecalcCr" value="No"><label for="noStopCr">No</label></span><div id="stopInterestRecalcCrError" class="error"></div><br>
+                        <label for="creditInterestCompoundingFreq">Credit Interest Compounding Frequency</label>
+                        <select id="creditInterestCompoundingFreq" name="creditInterestCompoundingFreq">
+                            <option value="">Select</option>
+                            <option value="N">N - No Compounding</option>
+                            <option value="M">M - Monthly</option>
+                        </select><div id="creditInterestCompoundingFreqError" class="error"></div><br>
+                        <label for="interestCalcFreqCr1">Interest Calculation Frequency (Cr.) 1</label>
+                        <select id="interestCalcFreqCr1" name="interestCalcFreqCr1">
+                            <option value="">Select</option>
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="holiday">Holiday</option>
+                            <option value="select">Select</option>
+                        </select><div id="interestCalcFreqCr1Error" class="error"></div><br>
+                        <label for="interestCalcFreqCr2">Interest Calculation Frequency (Cr.) 2</label>
+                        <select id="interestCalcFreqCr2" name="interestCalcFreqCr2">
+                            <option value="">Select</option>
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="holiday">Holiday</option>
+                            <option value="select">Select</option>
+                        </select><div id="interestCalcFreqCr2Error" class="error"></div><br>
+                        <label for="interestCalcFreqCr3">Interest Calculation Frequency (Cr.) 3</label>
+                        <select id="interestCalcFreqCr3" name="interestCalcFreqCr3">
+                            <option value="">Select</option>
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="holiday">Holiday</option>
+                            <option value="select">Select</option>
+                        </select><div id="interestCalcFreqCr3Error" class="error"></div><br>
+                        <label for="interestCalcFreqCr4">Interest Calculation Frequency (Cr.) 4</label>
+                        <select id="interestCalcFreqCr4" name="interestCalcFreqCr4">
+                            <option value="">Select</option>
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="holiday">Holiday</option>
+                            <option value="select">Select</option>
+                        </select><div id="interestCalcFreqCr4Error" class="error"></div><br>
+                        <label for="interestCalcFreqCr5">Interest Calculation Frequency (Cr.) 5</label>
+                        <select id="interestCalcFreqCr5" name="interestCalcFreqCr5">
+                            <option value="">Select</option>
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>
+                            <option value="holiday">Holiday</option>
+                            <option value="select">Select</option>
+                        </select><div id="interestCalcFreqCr5Error" class="error"></div><br>
+                        <label for="interestCalcFreqCr6">Interest Calculation Frequency (Cr.) 6</label>
+                        <select id="interestCalcFreqCr6" name="interestCalcFreqCr6">
+                            <option value="">Select</option>
+                            <option value="week">Week</option>
+                            <option value="day">Day</option>
+                            <option value="date">Date</option>    
+                            <option value="holiday">Holiday</option>
+                            <option value="select">Select</option>
+                        </select><div id="interestCalcFreqCr6Error" class="error"></div><br>
+                        <label for="modificationOfPegAllowed">Modification of Peg Allowed</label>
+                        <span class="checkbox-group"><input type="checkbox" id="yesModPeg" name="modificationOfPegAllowed" value="Yes"><label for="yesModPeg">Yes</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="noModPeg" name="modificationOfPegAllowed" value="No"><label for="noModPeg">No</label></span><div id="modificationOfPegAllowedError" class="error"></div><br>
+                        <label for="creditCompoundingRest">Credit Compounding Rest Indicator</label>
+                        <span class="checkbox-group"><input type="checkbox" id="noneCredit" name="creditCompoundingRest" value="None"><label for="noneCredit">None</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="monthEndCredit" name="creditCompoundingRest" value="Month End"><label for="monthEndCredit">Month End</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="acOpeningDateCredit" name="creditCompoundingRest" value="A/c. Opening Date"><label for="acOpeningDateCredit">A/c. Opening Date</label></span><div id="creditCompoundingRestError" class="error"></div><br>
+                        <label for="lookBackPeriod">Look Back Period (DD)</label><input type="number" id="lookBackPeriod" name="lookBackPeriod" placeholder="Enter Days"><div id="lookBackPeriodError" class="error"></div><br>
+                    </div>
+                    <div class="clear"></div>
+                    <input type="button" value="Go" onclick="validateSection4()">
+                    <input type="button" value="Clear" onclick="clearSection4()">
+                    <input type="button" value="Validate" style="background-color: blue; color: white; cursor: pointer; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#004d99';" onmouseout="this.style.backgroundColor='blue';" onclick="validate()">
+                    <div id="section4Success" class="success-message">Data Submitted Successfully!</div>
+                </div>
+
+               <div class="section" id="asset">
+                    <h2>Assets</h2>
+                    <div class="form-column">
+                        <label for="pastDuePeriod">Past Due Period</label><input type="number" id="pastDuePeriod" name="pastDuePeriod" placeholder="Enter Number"><div id="pastDuePeriodError" class="error"></div><br>
+                        <label for="subclassification">Subclassification</label><input type="text" id="subclassification" name="subclassification" placeholder="Enter Subclassification"><div id="subclassificationError" class="error"></div><br>
+                        <label for="pastDue">Past Due</label>
+                        <span class="checkbox-group"><input type="checkbox" id="yesPastDue" name="pastDue" value="Yes"><label for="yesPastDue">Yes</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="noPastDue" name="pastDue" value="No"><label for="noPastDue">No</label></span><div id="pastDueError" class="error"></div><br>
+                        <label for="placeholdersInterestSuspense">Placeholders Interest Suspense</label><input type="text" id="placeholdersInterestSuspense" name="placeholdersInterestSuspense" placeholder="Enter A/c"><div id="placeholdersInterestSuspenseError" class="error"></div><br>
+                        <label for="provisionDebit">Provision Debit</label><input type="text" id="provisionDebit" name="provisionDebit" placeholder="Enter A/c"><div id="provisionDebitError" class="error"></div><br>
+                        <label for="record">Record</label>
+                        <span class="checkbox-group"><input type="checkbox" id="delRecord" name="record" value="Del"><label for="delRecord">Del</label></span><div id="recordError" class="error"></div><br>
+                    </div>
+                    <div class="form-column">
+                        <label for="classificationMain">Classification Main</label><input type="text" id="classificationMain" name="classificationMain" placeholder="Enter Classification"><div id="classificationMainError" class="error"></div><br>
+                        <label for="interest">Interest</label>
+                        <span class="checkbox-group"><input type="checkbox" id="accrueInterest" name="interest" value="Accrue"><label for="accrueInterest">Accrue</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="bookInterest" name="interest" value="Book"><label for="bookInterest">Book</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="applyInterest" name="interest" value="Apply"><label for="applyInterest">Apply</label></span><div id="interestError" class="error"></div><br>
+                        <label for="manual">Manual</label>
+                        <span class="checkbox-group"><input type="checkbox" id="yesManual" name="manual" value="Yes"><label for="yesManual">Yes</label></span>
+                        <span class="checkbox-group"><input type="checkbox" id="noManual" name="manual" value="No"><label for="noManual">No</label></span><div id="manualError" class="error"></div><br>
+                        <label for="placeholdersPenalInterestSuspense">Placeholders Penal Interest Suspense</label><input type="text" id="placeholdersPenalInterestSuspense" name="placeholdersPenalInterestSuspense" placeholder="Enter A/c"><div id="placeholdersPenalInterestSuspenseError" class="error"></div><br>
+                        <label for="provisionCredit">Provision Credit</label><input type="text" id="provisionCredit" name="provisionCredit" placeholder="Enter A/c"><div id="provisionCreditError" class="error"></div><br>
+                    </div>
+                    <div class="clear"></div>
+                    <input type="button" value="Go" onclick="validateAsset()">
+                    <input type="button" value="Clear" onclick="clearAsset()">
+                    <input type="button" value="Validate" style="background-color: blue; color: white; cursor: pointer; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#004d99';" onmouseout="this.style.backgroundColor='blue';" onclick="validate()">
+                    <div id="assetSuccess" class="success-message">Data Submitted Successfully!</div>
+                </div>
+            </form>
+        `;
+
+    // Insert form into the container
+        document.getElementById("formContainer").innerHTML = formHtml;
+
+        // Function to open section
+        function openSection(evt, sectionName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("section");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(sectionName).style.display = "block";
+            evt.currentTarget.className += " active";
+            document.getElementById("tabContainer").style.display = "block";
+        }
+
+        // Validation function for Function page
+        function validateFunction() {
+            var isValid = true;
+            var successDiv = document.getElementById("functionSuccess");
+
+            // Clear errors and success message
+            ["functionError", "schemeCodeError", "productIdError", "schemeTypeError"].forEach(id => {
+                document.getElementById(id).innerHTML = "";
+            });
+            successDiv.style.display = "none";
+
+            // Validate fields
+            var fields = [
+                { id: "function", required: true },
+                { id: "schemeCode", required: true },
+                { id: "productId", required: true },
+                { id: "schemeType", required: true }
+            ];
+            fields.forEach(field => {
+                var value = document.getElementById(field.id).value.trim();
+                var errorDiv = document.getElementById(field.id + "Error");
+                if (!value && field.required) {
+                    isValid = false;
+                    errorDiv.innerHTML = "This field is required.";
+                }
+            });
+
+            if (isValid) {
+                successDiv.style.display = "block";
+                document.getElementById("functionPage").style.display = "none";
+                document.getElementById("tabContainer").style.display = "block";
+                document.getElementById("scheme").style.display = "block";
+                document.getElementsByClassName("tablinks")[0].className += " active";
+
+                // Send data to backend
+                const data = {
+                    function_type: document.getElementById("function").value,
+                    scheme_code: document.getElementById("schemeCode").value,
+                    product_id: document.getElementById("productId").value,
+                    scheme_type: document.getElementById("schemeType").value
+                };
+                fetch('http://localhost:3000/api/save-function', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(result => console.log(result.message))
+                .catch(error => console.error('Error:', error));
+            }
+        }
+
+        
+        // Validation function for Section 2 (Scheme)
+        function validateSection2() {
+            var form = document.getElementById("myForm");
+            var isValid = true;
+            var successDiv = document.getElementById("section2Success");
+
+            // Clear errors and success message
+            [
+                "setIdError", "natureOfSchemeError", "additionalCalendarBaseError", "expiryDateError",
+                "transactionRestrictionError", "acIdGenerationError", "sequenceError", "minPostingWorkClassError",
+                "productConceptError", "schemeSupervisorIdError", "acDetailsError", "productEligibilityCriteriaError",
+                "minAgeError", "languagePreferenceError", "preferredLanguageCodeError", "productTypeError",
+                "effectiveDateError", "schemeNameError", "shortNameError", "acPrefixError", "nonresidentError",
+                "productGroupError", "pdGeneralLedgerSubheadError", "transactionDetailsError", "maxAgeError",
+                "schemeNamePreferredError", "schemeShortNamePreferredError"
+            ].forEach(id => {
+                document.getElementById(id).innerHTML = "";
+            });
+            successDiv.style.display = "none";
+
+            // Validate fields
+            var fields = [
+                { id: "setId", required: true },
+                { id: "expiryDate", required: true, pattern: /^\d{2}-\d{2}-\d{4}$/ },
+                { id: "transactionRestriction", required: true },
+                { id: "acIdGeneration", required: true },
+                { id: "sequence", required: true },
+                { id: "minPostingWorkClass", required: true },
+                { id: "productConcept", required: true },
+                { id: "schemeSupervisorId", required: true },
+                { id: "acDetails", required: true },
+                { id: "productEligibilityCriteria", required: true },
+                { id: "minAge", required: true, type: "number" },
+                { id: "languagePreference", required: true },
+                { id: "preferredLanguageCode", required: true },
+                { id: "productType", required: true },
+                { id: "effectiveDate", required: true, pattern: /^\d{2}-\d{2}-\d{4}$/ },
+                { id: "schemeName", required: true },
+                { id: "shortName", required: true },
+                { id: "acPrefix", required: true },
+                { id: "productGroup", required: true },
+                { id: "pdGeneralLedgerSubhead", required: true },
+                { id: "transactionDetails", required: true },
+                { id: "maxAge", required: true, type: "number" },
+                { id: "schemeNamePreferred", required: true },
+                { id: "schemeShortNamePreferred", required: true }
+            ];
+            fields.forEach(field => {
+                var value = document.getElementById(field.id).value.trim();
+                var errorDiv = document.getElementById(field.id + "Error");
+                if (!value && field.required) {
+                    isValid = false;
+                    errorDiv.innerHTML = "This field is required.";
+                } else if (field.type === "number" && isNaN(value)) {
+                    isValid = false;
+                    errorDiv.innerHTML = "Must be a number.";
+                } else if (field.pattern && !field.pattern.test(value)) {
+                    isValid = false;
+                    errorDiv.innerHTML = "Must be in MM-DD-YYYY format.";
+                }
+            });
+
+            // Checkbox validation
+            ["natureOfScheme", "additionalCalendarBase", "nonresident"].forEach(fieldId => {
+                var checkboxes = document.getElementsByName(fieldId);
+                var checked = false;
+                for (var i = 0; i < checkboxes.length; i++) {
+                    if (checkboxes[i].checked) {
+                        checked = true;
+                        break;
+                    }
+                }
+                if (!checked) {
+                    isValid = false;
+                    document.getElementById(fieldId + "Error").innerHTML = "At least one option must be selected.";
+                }
+            });
+
+            // Date and age comparison validation
+            var effectiveDate = document.getElementById("effectiveDate").value.trim();
+            var expiryDate = document.getElementById("expiryDate").value.trim();
+            var minAge = parseInt(document.getElementById("minAge").value.trim(), 10);
+            var maxAge = parseInt(document.getElementById("maxAge").value.trim(), 10);
+
+            if (effectiveDate && expiryDate) {
+                var effective = new Date(effectiveDate.split("-")[2], effectiveDate.split("-")[0] - 1, effectiveDate.split("-")[1]);
+                var expiry = new Date(expiryDate.split("-")[2], expiryDate.split("-")[0] - 1, expiryDate.split("-")[1]);
+                if (expiry < effective) {
+                    isValid = false;
+                    document.getElementById("expiryDateError").innerHTML = "Expiry date must be greater than or equal to effective date.";
+                    document.getElementById("effectiveDateError").innerHTML = "Effective date must be less than or equal to expiry date.";
+                }
+            }
+            if (!isNaN(minAge) && !isNaN(maxAge) && maxAge <= minAge) {
+                isValid = false;
+                document.getElementById("maxAgeError").innerHTML = "Max age must be greater than min age.";
+                document.getElementById("minAgeError").innerHTML = "Min age must be less than max age.";
+            }
+
+            if (isValid) {
+                successDiv.style.display = "block";
+                openSection({ currentTarget: document.getElementsByClassName("tablinks")[1] }, "dormat");
+
+                // Send data to backend
+                const data = {
+                    set_id: document.getElementById("setId").value,
+                    nature_of_scheme: Array.from(document.getElementsByName("natureOfScheme"))
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value)
+                        .join(","),
+                    additional_calendar_base: Array.from(document.getElementsByName("additionalCalendarBase"))
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value)
+                        .join(","),
+                    expiry_date: document.getElementById("expiryDate").value,
+                    transaction_restriction: document.getElementById("transactionRestriction").value,
+                    ac_id_generation: document.getElementById("acIdGeneration").value,
+                    sequence: document.getElementById("sequence").value,
+                    min_posting_work_class: document.getElementById("minPostingWorkClass").value,
+                    product_concept: document.getElementById("productConcept").value,
+                    scheme_supervisor_id: document.getElementById("schemeSupervisorId").value,
+                    ac_details: document.getElementById("acDetails").value,
+                    product_eligibility_criteria: document.getElementById("productEligibilityCriteria").value,
+                    min_age: document.getElementById("minAge").value,
+                    language_preference: document.getElementById("languagePreference").value,
+                    preferred_language_code: document.getElementById("preferredLanguageCode").value,
+                    product_type: document.getElementById("productType").value,
+                    effective_date: document.getElementById("effectiveDate").value,
+                    scheme_name: document.getElementById("schemeName").value,
+                    short_name: document.getElementById("shortName").value,
+                    ac_prefix: document.getElementById("acPrefix").value,
+                    nonresident: Array.from(document.getElementsByName("nonresident"))
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value)
+                        .join(","),
+                    product_group: document.getElementById("productGroup").value,
+                    pd_general_ledger_subhead: document.getElementById("pdGeneralLedgerSubhead").value,
+                    transaction_details: document.getElementById("transactionDetails").value,
+                    max_age: document.getElementById("maxAge").value,
+                    scheme_name_preferred: document.getElementById("schemeNamePreferred").value,
+                    scheme_short_name_preferred: document.getElementById("schemeShortNamePreferred").value
+                };
+                console.log("The Schema Tab Data: ", data)
+                fetch('http://localhost:3000/api/save-scheme', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(result => console.log(result.message))
+                .catch(error => console.error('Error:', error));
+            }
+        }
+
+
+        // Validation function for Section 3 (Dormat)
+        function validateSection3() {
+            var form = document.getElementById("myForm");
+            var isValid = true;
+            var successDiv = document.getElementById("section3Success");
+
+            // Clear errors and success message
+            [
+                "noOfWithdrawalsError", "minBalanceWithChequeError", "ledgerFolioFeeError",
+                "inactiveAcAbnormalTransactionLimitError", "durationToMarkAsInactiveError", "dormatFeeError",
+                "interestMethodDrError", "fromBalanceDateError", "allowError", "acStatementError", "dormatFrequencyCode1Error",
+                "dormatFrequencyCode2Error", "dormatFrequencyCode3Error", "dormatFrequencyCode4Error", "dormatFrequencyCode5Error",
+                "specialSavingsSchemeError", "withdrawalNoticePeriodMonthError", "withdrawalNoticePeriodDayError",
+                "maxNoOfWithdrawalsWithoutNoticeError", "withdrawalFrequencyError", "noInterestIfWithdrawalsExceedError",
+                "debitBalanceLimitError", "feeOrExtraWithdrawalError", "dormatAcAbnormalTransactionLimitError",
+                "durationFromInactiveToDormatError", "inactiveFeeError", "interestMethodCrError", "toBalanceDateError",
+                "noOfNomineesAllowedError", "statementFrequency1Error", "statementFrequency2Error", "statementFrequency3Error",
+                "statementFrequency4Error", "statementFrequency5Error", "statementFrequency6Error", "inactiveFrequencyCode1Error",
+                "inactiveFrequencyCode2Error", "inactiveFrequencyCode3Error", "inactiveFrequencyCode4Error",
+                "inactiveFrequencyCode5Error", "specialSavingsAcSubcategoryError", "closureNoticePeriodMonthError",
+                "closureNoticePeriodDayError", "maxWithdrawalAmtWithoutNoticeError"
+            ].forEach(id => {
+                document.getElementById(id).innerHTML = "";
+            });
+            successDiv.style.display = "none";
+
+            // Validate fields
+            var fields = [
+                { id: "noOfWithdrawals", required: true, type: "number" },
+                { id: "minBalanceWithCheque", required: true, type: "number" },
+                { id: "ledgerFolioFee", required: true, type: "number" },
+                { id: "inactiveAcAbnormalTransactionLimit", required: true, type: "number" },
+                { id: "durationToMarkAsInactive", required: true, type: "number" },
+                { id: "dormatFee", required: true },
+                { id: "interestMethodDr", required: true },
+                { id: "fromBalanceDate", required: true },
+                { id: "allow", required: false },
+                { id: "acStatement", required: true },
+                { id: "dormatFrequencyCode1", required: true },
+                { id: "dormatFrequencyCode2", required: true },
+                { id: "dormatFrequencyCode3", required: true },
+                { id: "dormatFrequencyCode4", required: true },
+                { id: "dormatFrequencyCode5", required: true },
+                { id: "specialSavingsScheme", required: true },
+                { id: "withdrawalNoticePeriodMonth", required: true},
+                { id: "withdrawalNoticePeriodDay", required: true},
+                { id: "maxNoOfWithdrawalsWithoutNotice", required: true, type: "number" },
+                { id: "withdrawalFrequency", required: true },
+                { id: "noInterestIfWithdrawalsExceed", required: true },
+                { id: "minBalanceWithCheque", required: true, type: "number" },
+                { id: "ledgerFolioFee", required: true, type: "number" },
+                { id: "inactiveAcAbnormalTransactionLimit", required: true, type: "number" },
+                { id: "durationToMarkAsInactive", required: true, type: "number" },
+                { id: "dormatFee", required: true },
+                { id: "interestMethodDr", required: true },
+                { id: "fromBalanceDate", required: true },
+                // { id: "acStatement", required: true },
+                // { id: "dormatFrequencyCode1", required: true },
+                // { id: "dormatFrequencyCode2", required: true },
+                // { id: "dormatFrequencyCode3", required: true },
+                // { id: "dormatFrequencyCode4", required: true },
+                // { id: "dormatFrequencyCode5", required: true },
+                // { id: "specialSavingsScheme", required: true },
+                // { id: "withdrawalNoticePeriodMonth", required: true },
+                // { id: "withdrawalNoticePeriodDay", required: true },
+                // { id: "maxNoOfWithdrawalsWithoutNotice", required: true, type: "number" },
+                // { id: "withdrawalFrequency", required: true },
+                { id: "debitBalanceLimit", required: true, type: "number" },
+                { id: "feeOrExtraWithdrawal", required: true, type: "number" },
+                { id: "dormatAcAbnormalTransactionLimit", required: true, type: "number" },
+                { id: "durationFromInactiveToDormat", required: true, type: "number" },
+                { id: "inactiveFee", required: true },
+                { id: "interestMethodCr", required: true },
+                { id: "toBalanceDate", required: true },
+                { id: "noOfNomineesAllowed", required: true, type: "number" },
+                { id: "statementFrequency1", required: true },
+                { id: "statementFrequency2", required: true },
+                { id: "statementFrequency3", required: true },
+                { id: "statementFrequency4", required: true },
+                { id: "statementFrequency5", required: true },
+                { id: "statementFrequency6", required: true },
+                { id: "inactiveFrequencyCode1", required: true },
+                { id: "inactiveFrequencyCode2", required: true },
+                { id: "inactiveFrequencyCode3", required: true },
+                { id: "inactiveFrequencyCode4", required: true },
+                { id: "inactiveFrequencyCode5", required: true },
+                { id: "specialSavingsAcSubcategory", required: true },
+                { id: "closureNoticePeriodMonth", required: true },
+                { id: "closureNoticePeriodDay", required: true },
+                { id: "maxWithdrawalAmtWithoutNotice", required: true, type: "number" }
+            ];
+            fields.forEach(field => {
+                var value = document.getElementById(field.id).value.trim();
+                console.log(field.id, "The Value: ", value, " and Type: ", typeof value);
+                var errorDiv = document.getElementById(field.id + "Error");
+                if (!value && field.required) {
+                    isValid = false;
+                    errorDiv.innerHTML = "This field is required.";
+                } else if (field.type === "number" && isNaN(value)) {
+                    isValid = false;
+                    errorDiv.innerHTML = "Must be a number.";
+                }
+            });
+
+            // Checkbox validation
+            ["noInterestIfWithdrawalsExceed", "allow"].forEach(fieldId => {
+                var checkboxes = document.getElementsByName(fieldId);
+                var checked = false;
+                for (var i = 0; i < checkboxes.length; i++) {
+                    if (checkboxes[i].checked) {
+                        checked = true;
+                        break;
+                    }
+                }
+                if (!checked) {
+                    isValid = false;
+                    document.getElementById(fieldId + "Error").innerHTML = "At least one option must be selected.";
+                }
+            });
+
+            if (isValid) {
+                successDiv.style.display = "block";
+                openSection({ currentTarget: document.getElementsByClassName("tablinks")[2] }, "section4");
+
+                // Send data to backend
+                const data = {
+                    no_of_withdrawals: document.getElementById("noOfWithdrawals").value,
+                    min_balance_with_cheque: document.getElementById("minBalanceWithCheque").value,
+                    ledger_folio_fee: document.getElementById("ledgerFolioFee").value,
+                    inactive_ac_abnormal_transaction_limit: document.getElementById("inactiveAcAbnormalTransactionLimit").value,
+                    duration_to_mark_as_inactive: document.getElementById("durationToMarkAsInactive").value,
+                    dormat_fee: document.getElementById("dormatFee").value,
+                    interest_method_dr: document.getElementById("interestMethodDr").value,
+                    from_balance_date: document.getElementById("fromBalanceDate").value,
+                    ac_statement: document.getElementById("acStatement").value,
+                    dormat_frequency_code1: document.getElementById("dormatFrequencyCode1").value,
+                    dormat_frequency_code2: document.getElementById("dormatFrequencyCode2").value,
+                    dormat_frequency_code3: document.getElementById("dormatFrequencyCode3").value,
+                    dormat_frequency_code4: document.getElementById("dormatFrequencyCode4").value,
+                    dormat_frequency_code5: document.getElementById("dormatFrequencyCode5").value,
+                    special_savings_scheme: document.getElementById("specialSavingsScheme").value,
+                    withdrawal_notice_period_month: document.getElementById("withdrawalNoticePeriodMonth").value,
+                    withdrawal_notice_period_day: document.getElementById("withdrawalNoticePeriodDay").value,
+                    max_no_of_withdrawals_without_notice: document.getElementById("maxNoOfWithdrawalsWithoutNotice").value,
+                    withdrawal_frequency: document.getElementById("withdrawalFrequency").value,
+                    no_interest_if_withdrawals_exceed: Array.from(document.getElementsByName("noInterestIfWithdrawalsExceed"))
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value)
+                        .join(","),
+                    debit_balance_limit: document.getElementById("debitBalanceLimit").value,
+                    fee_or_extra_withdrawal: document.getElementById("feeOrExtraWithdrawal").value,
+                    dormat_ac_abnormal_transaction_limit: document.getElementById("dormatAcAbnormalTransactionLimit").value,
+                    duration_from_inactive_to_dormat: document.getElementById("durationFromInactiveToDormat").value,
+                    inactive_fee: document.getElementById("inactiveFee").value,
+                    interest_method_cr: document.getElementById("interestMethodCr").value,
+                    to_balance_date: document.getElementById("toBalanceDate").value,
+                    no_of_nominees_allowed: document.getElementById("noOfNomineesAllowed").value,
+                    statement_frequency1: document.getElementById("statementFrequency1").value,
+                    statement_frequency2: document.getElementById("statementFrequency2").value,
+                    statement_frequency3: document.getElementById("statementFrequency3").value,
+                    statement_frequency4: document.getElementById("statementFrequency4").value,
+                    statement_frequency5: document.getElementById("statementFrequency5").value,
+                    statement_frequency6: document.getElementById("statementFrequency6").value,
+                    inactive_frequency_code1: document.getElementById("inactiveFrequencyCode1").value,
+                    inactive_frequency_code2: document.getElementById("inactiveFrequencyCode2").value,
+                    inactive_frequency_code3: document.getElementById("inactiveFrequencyCode3").value,
+                    inactive_frequency_code4: document.getElementById("inactiveFrequencyCode4").value,
+                    inactive_frequency_code5: document.getElementById("inactiveFrequencyCode5").value,
+                    special_savings_ac_subcategory: document.getElementById("specialSavingsAcSubcategory").value,
+                    closure_notice_period_month: document.getElementById("closureNoticePeriodMonth").value,
+                    closure_notice_period_day: document.getElementById("closureNoticePeriodDay").value,
+                    max_withdrawal_amt_without_notice: document.getElementById("maxWithdrawalAmtWithoutNotice").value,
+                    allow: Array.from(document.getElementsByName("allow"))
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value)
+                        .join(",")
+                };
+                console.log("The Data: ",data)
+                fetch('http://localhost:3000/api/save-dormat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(result => console.log(result.message))
+                .catch(error => console.error('Error:', error));
+            }
+        }
+
+        // Validation function for Section 4 (Interest)
+        function validateSection4() {
+            var form = document.getElementById("myForm");
+            var isValid = true;
+            var successDiv = document.getElementById("section4Success");
+
+            // Clear errors and success message
+            [
+                "transactionCodeError", "amountError", "transactionDateError", "descriptionError", "plAccountCcyError",
+                "interestPayableError", "interestReceivableError", "pastInterestPlaceholderError", "pastDueInterestPlaceholderError",
+                "serviceFeeError", "plNormalInterestPaidError", "plPenalInterestPaidError", "overdueInterestPayableError",
+                "parkingStopInterestRecalcDrError", "interestCompoundingFreqDrError", "bookingTransactionScriptError",
+                "interestTransactionScriptError", "interestCalcFreqDr1Error", "interestCalcFreqDr2Error", "interestCalcFreqDr3Error",
+                "interestCalcFreqDr4Error", "interestCalcFreqDr5Error", "interestCalcFreqDr6Error", "interestOptionsError",
+                "pegInterestToAcError", "pegReviewCustomerError", "debitCompoundingRestError", "transferInterestDetailsError",
+                "acPlaceholder1Error", "pastDueInterestPlaceholder2Error", "acPlaceholder2Error", "plNormalInterestReceivedError",
+                "interestParkingPriorTaxError", "plOverdueInterestTDError", "advanceInterestAvError", "stopInterestRecalcCrError",
+                "creditInterestCompoundingFreqError", "interestCalcFreqCr1Error", "interestCalcFreqCr2Error", "interestCalcFreqCr3Error",
+                "interestCalcFreqCr4Error", "interestCalcFreqCr5Error", "interestCalcFreqCr6Error", "modificationOfPegAllowedError",
+                "creditCompoundingRestError", "lookBackPeriodError"
+            ].forEach(id => {
+                document.getElementById(id).innerHTML = "";
+            });
+            successDiv.style.display = "none";
+
+            // Validate fields
+            var fields = [
+                { id: "transactionCode", required: true },
+                { id: "amount", required: true, type: "number" },
+                { id: "transactionDate", required: true, pattern: /^\d{2}-\d{2}-\d{4}$/ },
+                { id: "description", required: true },
+                { id: "pastInterestPlaceholder", required: true, type: "number" },
+                { id: "pastDueInterestPlaceholder", required: true, type: "number" },
+                { id: "plNormalInterestPaid", required: true, type: "number" },
+                { id: "plPenalInterestPaid", required: true, type: "number" },
+                { id: "overdueInterestPayable", required: true },
+                { id: "bookingTransactionScript", required: true },
+                { id: "interestTransactionScript", required: true },
+                { id: "acPlaceholder1", required: true },
+                { id: "pastDueInterestPlaceholder2", required: true, type: "number" },
+                { id: "acPlaceholder2", required: true },
+                { id: "plNormalInterestReceived", required: true, type: "number" },
+                { id: "interestParkingPriorTax", required: true },
+                { id: "plOverdueInterestTD", required: true, type: "number" },
+                { id: "advanceInterestAv", required: true },
+                { id: "lookBackPeriod", required: true, type: "number" },
+                { id: "interestCompoundingFreqDr", required: true },
+                { id: "creditInterestCompoundingFreq", required: true },
+                { id: "interestCalcFreqDr1", required: true },
+                { id: "interestCalcFreqDr2", required: true },
+                { id: "interestCalcFreqDr3", required: true },
+                { id: "interestCalcFreqDr4", required: true },
+                { id: "interestCalcFreqDr5", required: true },
+                { id: "interestCalcFreqDr6", required: true },
+                { id: "interestCalcFreqCr1", required: true },
+                { id: "interestCalcFreqCr2", required: true },
+                { id: "interestCalcFreqCr3", required: true },
+                { id: "interestCalcFreqCr4", required: true },
+                { id: "interestCalcFreqCr5", required: true },
+                { id: "interestCalcFreqCr6", required: true }
+            ];
+            fields.forEach(field => {
+                var value = document.getElementById(field.id).value.trim();
+                var errorDiv = document.getElementById(field.id + "Error");
+                if (!value && field.required) {
+                    isValid = false;
+                    errorDiv.innerHTML = "This field is required.";
+                } else if (field.type === "number" && isNaN(value)) {
+                    isValid = false;
+                    errorDiv.innerHTML = "Must be a number.";
+                } else if (field.pattern && !field.pattern.test(value)) {
+                    isValid = false;
+                    errorDiv.innerHTML = "Must be in MM-DD-YYYY format.";
+                }
+            });
+
+            // Checkbox validation
+            ["plAccountCcy", "interestPayable", "interestReceivable", "serviceFee", "parkingStopInterestRecalcDr",
+            "stopInterestRecalcCr", "pegInterestToAc", "pegReviewCustomer", "modificationOfPegAllowed",
+            "debitCompoundingRest", "creditCompoundingRest", "transferInterestDetails", "interestOptions"].forEach(fieldId => {
+                var checkboxes = document.getElementsByName(fieldId);
+                var checked = false;
+                for (var i = 0; i < checkboxes.length; i++) {
+                    if (checkboxes[i].checked) {
+                        checked = true;
+                        break;
+                    }
+                }
+                if (!checked) {
+                    isValid = false;
+                    document.getElementById(fieldId + "Error").innerHTML = "At least one option must be selected.";
+                }
+            });
+
+            if (isValid) {
+                successDiv.style.display = "block";
+                openSection({ currentTarget: document.getElementsByClassName("tablinks")[3] }, "asset");
+
+                // Send data to backend
+                const data = {
+                    transaction_code: document.getElementById("transactionCode").value,
+                    amount: document.getElementById("amount").value,
+                    transaction_date: document.getElementById("transactionDate").value,
+                    description: document.getElementById("description").value,
+                    pl_account_ccy: Array.from(document.getElementsByName("plAccountCcy"))
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value)
+                        .join(","),
+                    interest_payable: Array.from(document.getElementsByName("interestPayable"))
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value)
+                        .join(","),
+                    interest_receivable: Array.from(document.getElementsByName("interestReceivable"))
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value)
+                        .join(","),
+                    past_interest_placeholder: document.getElementById("pastInterestPlaceholder").value,
+                    past_due_interest_placeholder: document.getElementById("pastDueInterestPlaceholder").value,
+                    service_fee: Array.from(document.getElementsByName("serviceFee"))
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value)
+                        .join(","),
+                    pl_normal_interest_paid: document.getElementById("plNormalInterestPaid").value,
+                    pl_penal_interest_paid: document.getElementById("plPenalInterestPaid").value,
+                    overdue_interest_payable: document.getElementById("overdueInterestPayable").value,
+                    parking_stop_interest_recalc_dr: Array.from(document.getElementsByName("parkingStopInterestRecalcDr"))
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value)
+                        .join(","),
+                    interest_compounding_freq_dr: document.getElementById("interestCompoundingFreqDr").value,
+                    booking_transaction_script: document.getElementById("bookingTransactionScript").value,
+                    interest_transaction_script: document.getElementById("interestTransactionScript").value,
+                    interest_calc_freq_dr1: document.getElementById("interestCalcFreqDr1").value,
+                    interest_calc_freq_dr2: document.getElementById("interestCalcFreqDr2").value,
+                    interest_calc_freq_dr3: document.getElementById("interestCalcFreqDr3").value,
+                    interest_calc_freq_dr4: document.getElementById("interestCalcFreqDr4").value,
+                    interest_calc_freq_dr5: document.getElementById("interestCalcFreqDr5").value,
+                    interest_calc_freq_dr6: document.getElementById("interestCalcFreqDr6").value,
+                    interest_options: Array.from(document.getElementsByName("interestOptions"))
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value)
+                        .join(","),
+                    peg_interest_to_ac: Array.from(document.getElementsByName("pegInterestToAc"))
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value)
+                        .join(","),
+                    peg_review_customer: Array.from(document.getElementsByName("pegReviewCustomer"))
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value)
+                        .join(","),
+                    debit_compounding_rest: Array.from(document.getElementsByName("debitCompoundingRest"))
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value)
+                        .join(","),
+                    transfer_interest_details: Array.from(document.getElementsByName("transferInterestDetails"))
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value)
+                        .join(","),
+                    ac_placeholder1: document.getElementById("acPlaceholder1").value,
+                    past_due_interest_placeholder2: document.getElementById("pastDueInterestPlaceholder2").value,
+                    ac_placeholder2: document.getElementById("acPlaceholder2").value,
+                    pl_normal_interest_received: document.getElementById("plNormalInterestReceived").value,
+                    interest_parking_prior_tax: document.getElementById("interestParkingPriorTax").value,
+                    pl_overdue_interest_td: document.getElementById("plOverdueInterestTD").value,
+                    advance_interest_av: document.getElementById("advanceInterestAv").value,
+                    stop_interest_recalc_cr: Array.from(document.getElementsByName("stopInterestRecalcCr"))
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value)
+                        .join(","),
+                    credit_interest_compounding_freq: document.getElementById("creditInterestCompoundingFreq").value,
+                    interest_calc_freq_cr1: document.getElementById("interestCalcFreqCr1").value,
+                    interest_calc_freq_cr2: document.getElementById("interestCalcFreqCr2").value,
+                    interest_calc_freq_cr3: document.getElementById("interestCalcFreqCr3").value,
+                    interest_calc_freq_cr4: document.getElementById("interestCalcFreqCr4").value,
+                    interest_calc_freq_cr5: document.getElementById("interestCalcFreqCr5").value,
+                    interest_calc_freq_cr6: document.getElementById("interestCalcFreqCr6").value,
+                    modification_of_peg_allowed: Array.from(document.getElementsByName("modificationOfPegAllowed"))
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value)
+                        .join(","),
+                    credit_compounding_rest: Array.from(document.getElementsByName("creditCompoundingRest"))
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value)
+                        .join(","),
+                    look_back_period: document.getElementById("lookBackPeriod").value
+                };
+                fetch('http://localhost:3000/api/save-interest', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(result => console.log(result.message))
+                .catch(error => console.error('Error:', error));
+            }
+        }
+
+        function validateAsset() {
+            var form = document.getElementById("myForm");
+            var isValid = true;
+            var successDiv = document.getElementById("assetSuccess");
+
+            // Clear errors and success message
+            [
+                "pastDuePeriodError", "subclassificationError", "pastDueError", "placeholdersInterestSuspenseError",
+                "provisionDebitError", "recordError", "classificationMainError", "interestError", "manualError",
+                "placeholdersPenalInterestSuspenseError", "provisionCreditError"
+            ].forEach(id => {
+                document.getElementById(id).innerHTML = "";
+            });
+            successDiv.style.display = "none";
+
+            // Validate fields
+            var fields = [
+                { id: "pastDuePeriod", required: true, type: "number" },
+                { id: "subclassification", required: true },
+                { id: "placeholdersInterestSuspense", required: true },
+                { id: "provisionDebit", required: true },
+                { id: "classificationMain", required: true },
+                { id: "placeholdersPenalInterestSuspense", required: true },
+                { id: "provisionCredit", required: true }
+            ];
+            fields.forEach(field => {
+                var value = document.getElementById(field.id).value.trim();
+                var errorDiv = document.getElementById(field.id + "Error");
+                if (!value && field.required) {
+                    isValid = false;
+                    errorDiv.innerHTML = "This field is required.";
+                } else if (field.type === "number" && isNaN(value)) {
+                    isValid = false;
+                    errorDiv.innerHTML = "Must be a number.";
+                }
+            });
+
+            // Checkbox validation
+            ["pastDue", "interest", "manual", "record"].forEach(fieldId => {
+                var checkboxes = document.getElementsByName(fieldId);
+                var checked = false;
+                if (checkboxes.length) {
+                    for (var i = 0; i < checkboxes.length; i++) {
+                        if (checkboxes[i].checked) {
+                            checked = true;
+                            break;
+                        }
+                    }
+                } else if (checkboxes && !checkboxes.checked) {
+                    checked = false;
+                }
+                if (!checked) {
+                    isValid = false;
+                    document.getElementById(fieldId + "Error").innerHTML = "At least one option must be selected.";
+                }
+            });
+
+            if (isValid) {
+                successDiv.style.display = "block";
+
+                // Send data to backend
+                const data = {
+                    past_due_period: document.getElementById("pastDuePeriod").value,
+                    subclassification: document.getElementById("subclassification").value,
+                    past_due: Array.from(document.getElementsByName("pastDue"))
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value)
+                        .join(","),
+                    placeholders_interest_suspense: document.getElementById("placeholdersInterestSuspense").value,
+                    provision_debit: document.getElementById("provisionDebit").value,
+                    record: Array.from(document.getElementsByName("record"))
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value)
+                        .join(","),
+                    classification_main: document.getElementById("classificationMain").value,
+                    interest: Array.from(document.getElementsByName("interest"))
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value)
+                        .join(","),
+                    manual: Array.from(document.getElementsByName("manual"))
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value)
+                        .join(","),
+                    placeholders_penal_interest_suspense: document.getElementById("placeholdersPenalInterestSuspense").value,
+                    provision_credit: document.getElementById("provisionCredit").value
+                };
+                fetch('http://localhost:3000/api/save-asset', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(result => console.log(result.message))
+                .catch(error => console.error('Error:', error));
+            }
+        }
+
+
+        function clearSection(sectionId) {
+            var form = document.getElementById("myForm");
+            if (!form) {
+                console.error("myForm not found!");
+                return;
+            }
+            var successDiv = document.getElementById(sectionId + "Success");
+
+            // Clear success message
+            if (successDiv) {
+                successDiv.style.display = "none";
+            }
+
+            // Clear input fields (text and number) within the section
+            var inputs = document.querySelectorAll("#" + sectionId + " input[type='text'], #" + sectionId + " input[type='number']");
+            inputs.forEach(function(input) {
+                input.value = "";
+            });
+
+            // Clear select elements within the section
+            var selects = document.querySelectorAll("#" + sectionId + " select");
+            selects.forEach(function(select) {
+                select.selectedIndex = 0;
+            });
+
+            // Clear checkboxes within the section
+            var checkboxes = document.querySelectorAll("#" + sectionId + " input[type='checkbox']");
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = false;
+            });
+
+            // Clear error messages within the section
+            var errorDivs = document.querySelectorAll("#" + sectionId + " .error");
+            errorDivs.forEach(function(errorDiv) {
+                errorDiv.innerHTML = "";
+            });
+        }
+
+    // Wrapper functions for Clear buttons
+    function clearFunction() {
+        clearSection("functionPage");
+    }
+
+    function clearSection2() {
+        clearSection("scheme");
+    }
+
+    function clearSection3() {
+        clearSection("dormat");
+    }
+
+    function clearSection4() {
+        clearSection("section4");
+    }
+
+    function clearAsset() {
+        clearSection("asset");
+    }
+
+function openSection(evt, sectionName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("section");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(sectionName).style.display = "block";
+        // Find and activate the corresponding tab button based on sectionName
+        var tabOrder = ["scheme", "dormat", "section4", "asset"];
+        var tabIndex = tabOrder.indexOf(sectionName);
+        if (tabIndex !== -1 && tablinks[tabIndex]) {
+            tablinks[tabIndex].className += " active";
+        }
+        document.getElementById("tabContainer").style.display = "block";
+}
+
+//function to validate for each data fields of each tabs
+
+    function validate() {
+        var allTabs = ["scheme", "dormat", "section4", "asset"]; // Updated to use "section4" for Interest
+        var missingTabs = [];
+        var form = document.getElementById("myForm");
+
+        // Clear previous error messages
+        var existingErrors = document.getElementById("validationErrors");
+        if (existingErrors) existingErrors.remove();
+
+        // Clear all inline errors
+        var allErrorDivs = document.getElementsByClassName("error");
+        for (var i = 0; i < allErrorDivs.length; i++) {
+            allErrorDivs[i].innerHTML = "";
+        }
+
+        // Validate each tab (excluding functionPage)
+        var allFields = {
+            scheme: [
+                { id: "setId", type: "text", required: true },
+                { id: "expiryDate", type: "text", required: true, pattern: /^\d{2}-\d{2}-\d{4}$/ },
+                { id: "transactionRestriction", type: "text", required: true },
+                { id: "acIdGeneration", type: "text", required: true },
+                { id: "sequence", type: "text", required: true },
+                { id: "minPostingWorkClass", type: "text", required: true },
+                { id: "productConcept", type: "text", required: true },
+                { id: "schemeSupervisorId", type: "text", required: true },
+                { id: "acDetails", type: "select", required: true },
+                { id: "productEligibilityCriteria", type: "text", required: true },
+                { id: "minAge", type: "number", required: true },
+                { id: "languagePreference", type: "text", required: true },
+                { id: "preferredLanguageCode", type: "text", required: true },
+                { id: "productType", type: "text", required: true },
+                { id: "effectiveDate", type: "text", required: true, pattern: /^\d{2}-\d{2}-\d{4}$/ },
+                { id: "schemeName", type: "text", required: true },
+                { id: "shortName", type: "text", required: true },
+                { id: "acPrefix", type: "text", required: true },
+                { id: "productGroup", type: "text", required: true },
+                { id: "pdGeneralLedgerSubhead", type: "text", required: true },
+                { id: "transactionDetails", type: "select", required: true },
+                { id: "maxAge", type: "number", required: true },
+                { id: "schemeNamePreferred", type: "text", required: true },
+                { id: "schemeShortNamePreferred", type: "text", required: true }
+            ],
+            dormat: [
+                { id: "noOfWithdrawals", type: "number", required: true },
+                { id: "minBalanceWithCheque", type: "number", required: true },
+                { id: "ledgerFolioFee", type: "number", required: true },
+                { id: "inactiveAcAbnormalTransactionLimit", type: "number", required: true },
+                { id: "durationToMarkAsInactive", type: "number", required: true },
+                { id: "dormatFee", type: "text", required: true },
+                { id: "interestMethodDr", type: "select", required: true },
+                { id: "fromBalanceDate", type: "select", required: true },
+                { id: "acStatement", type: "select", required: true },
+                { id: "dormatFrequencyCode1", type: "select", required: true },
+                { id: "dormatFrequencyCode2", type: "select", required: true },
+                { id: "dormatFrequencyCode3", type: "select", required: true },
+                { id: "dormatFrequencyCode4", type: "select", required: true },
+                { id: "dormatFrequencyCode5", type: "select", required: true },
+                { id: "specialSavingsScheme", type: "select", required: true },
+                { id: "withdrawalNoticePeriodMonth", type: "select", required: true },
+                { id: "withdrawalNoticePeriodDay", type: "select", required: true },
+                { id: "maxNoOfWithdrawalsWithoutNotice", type: "number", required: true },
+                { id: "withdrawalFrequency", type: "select", required: true },
+                { id: "debitBalanceLimit", type: "number", required: true },
+                { id: "feeOrExtraWithdrawal", type: "number", required: true },
+                { id: "dormatAcAbnormalTransactionLimit", type: "number", required: true },
+                { id: "durationFromInactiveToDormat", type: "number", required: true },
+                { id: "inactiveFee", type: "text", required: true },
+                { id: "interestMethodCr", type: "select", required: true },
+                { id: "toBalanceDate", type: "select", required: true },
+                { id: "noOfNomineesAllowed", type: "number", required: true },
+                { id: "statementFrequency1", type: "select", required: true },
+                { id: "statementFrequency2", type: "select", required: true },
+                { id: "statementFrequency3", type: "select", required: true },
+                { id: "statementFrequency4", type: "select", required: true },
+                { id: "statementFrequency5", type: "select", required: true },
+                { id: "statementFrequency6", type: "select", required: true },
+                { id: "inactiveFrequencyCode1", type: "select", required: true },
+                { id: "inactiveFrequencyCode2", type: "select", required: true },
+                { id: "inactiveFrequencyCode3", type: "select", required: true },
+                { id: "inactiveFrequencyCode4", type: "select", required: true },
+                { id: "inactiveFrequencyCode5", type: "select", required: true },
+                { id: "specialSavingsAcSubcategory", type: "text", required: true },
+                { id: "closureNoticePeriodMonth", type: "select", required: true },
+                { id: "closureNoticePeriodDay", type: "select", required: true },
+                { id: "maxWithdrawalAmtWithoutNotice", type: "number", required: true }
+            ],
+            section4: [ // Updated to "section4" for Interest
+                { id: "transactionCode", type: "text", required: true },
+                { id: "amount", type: "number", required: true },
+                { id: "transactionDate", type: "text", required: true, pattern: /^\d{2}-\d{2}-\d{4}$/ },
+                { id: "description", type: "text", required: true },
+                { id: "pastInterestPlaceholder", type: "number", required: true },
+                { id: "pastDueInterestPlaceholder", type: "number", required: true },
+                { id: "plNormalInterestPaid", type: "number", required: true },
+                { id: "plPenalInterestPaid", type: "number", required: true },
+                { id: "overdueInterestPayable", type: "text", required: true },
+                { id: "bookingTransactionScript", type: "text", required: true },
+                { id: "interestTransactionScript", type: "text", required: true },
+                { id: "acPlaceholder1", type: "text", required: true },
+                { id: "pastDueInterestPlaceholder2", type: "number", required: true },
+                { id: "acPlaceholder2", type: "text", required: true },
+                { id: "plNormalInterestReceived", type: "number", required: true },
+                { id: "interestParkingPriorTax", type: "text", required: true },
+                { id: "plOverdueInterestTD", type: "number", required: true },
+                { id: "advanceInterestAv", type: "text", required: true },
+                { id: "lookBackPeriod", type: "number", required: true },
+                { id: "interestCompoundingFreqDr", type: "select", required: true },
+                { id: "creditInterestCompoundingFreq", type: "select", required: true },
+                { id: "interestCalcFreqDr1", type: "select", required: true },
+                { id: "interestCalcFreqDr2", type: "select", required: true },
+                { id: "interestCalcFreqDr3", type: "select", required: true },
+                { id: "interestCalcFreqDr4", type: "select", required: true },
+                { id: "interestCalcFreqDr5", type: "select", required: true },
+                { id: "interestCalcFreqDr6", type: "select", required: true },
+                { id: "interestCalcFreqCr1", type: "select", required: true },
+                { id: "interestCalcFreqCr2", type: "select", required: true },
+                { id: "interestCalcFreqCr3", type: "select", required: true },
+                { id: "interestCalcFreqCr4", type: "select", required: true },
+                { id: "interestCalcFreqCr5", type: "select", required: true },
+                { id: "interestCalcFreqCr6", type: "select", required: true }
+            ],
+            asset: [
+                { id: "pastDuePeriod", type: "number", required: true },
+                { id: "subclassification", type: "text", required: true },
+                { id: "placeholdersInterestSuspense", type: "text", required: true },
+                { id: "provisionDebit", type: "text", required: true },
+                { id: "classificationMain", type: "text", required: true },
+                { id: "placeholdersPenalInterestSuspense", type: "text", required: true },
+                { id: "provisionCredit", type: "text", required: true }
+            ]
+        };
+
+        // Checkbox fields to validate
+        var checkboxFields = {
+            scheme: ["natureOfScheme", "additionalCalendarBase", "nonresident"],
+            dormat: ["noInterestIfWithdrawalsExceed"],
+            section4: ["plAccountCcy", "interestPayable", "interestReceivable", "serviceFee", "parkingStopInterestRecalcDr", "stopInterestRecalcCr", "pegInterestToAc", "pegReviewCustomer", "modificationOfPegAllowed", "debitCompoundingRest", "creditCompoundingRest", "transferInterestDetails", "interestOptions"],
+            asset: ["record"]
+        };
+
+        allTabs.forEach(function(tabId) {
+            var isValid = true;
+            var fields = allFields[tabId];
+            var successDiv = document.getElementById(tabId === "section4" ? "section4Success" : tabId + "Success");
+
+            // Skip validation if the tab has already been successfully validated
+            if (successDiv && successDiv.style.display === "block") {
+                return; // Skip this tab if it’s already validated
+            }
+
+            fields.forEach(function(field) {
+                var value = form.elements[field.id] ? form.elements[field.id].value.trim() : "";
+                var errorDiv = document.getElementById(field.id + "Error");
+                if (!value || (field.type === "select" && value === "")) {
+                    isValid = false;
+                    if (errorDiv) errorDiv.innerHTML = "This field is missing.";
+                } else if (field.type === "number" && isNaN(value)) {
+                    isValid = false;
+                    if (errorDiv) errorDiv.innerHTML = "Must be a number.";
+                } else if (field.pattern && !field.pattern.test(value)) {
+                    isValid = false;
+                    if (errorDiv) errorDiv.innerHTML = "Must be in MM-DD-YYYY format.";
+                }
+            });
+
+            // Validate checkboxes (handle radio buttons or grouped checkboxes)
+            if (checkboxFields[tabId]) {
+                checkboxFields[tabId].forEach(function(fieldId) {
+                    var checkboxes = form.elements[fieldId];
+                    var checked = false;
+                    if (checkboxes && checkboxes.length) { // Handle radio buttons or multiple checkboxes
+                        for (var i = 0; i < checkboxes.length; i++) {
+                            if (checkboxes[i].checked) {
+                                checked = true;
+                                break;
+                            }
+                        }
+                    } else if (checkboxes) { // Handle single checkbox
+                        checked = checkboxes.checked;
+                    }
+                    var errorDiv = document.getElementById(fieldId + "Error");
+                    if (!checked) {
+                        isValid = false;
+                        if (errorDiv) errorDiv.innerHTML = "At least one option must be selected.";
+                    } else {
+                        if (errorDiv) errorDiv.innerHTML = ""; // Clear error if valid
+                    }
+                });
+            }
+
+            if (!isValid) {
+                missingTabs.push(tabId);
+            }
+        });
+
+        // Display clickable error messages
+        if (missingTabs.length > 0) {
+            var errorContainer = document.createElement("div");
+            errorContainer.id = "validationErrors";
+            errorContainer.style.color = "red";
+            missingTabs.forEach(function(tabId) {
+                var tabName = tabId === "section4" ? "Interest" : tabId.charAt(0).toUpperCase() + tabId.slice(1); // Custom name for Interest
+                var errorMsg = document.createElement("div");
+                errorMsg.innerHTML = `<a href="#" onclick="openSection(event, '${tabId}'); return false;">Data field is missing in ${tabName} tab</a>`;
+                errorMsg.style.margin = "5px 0";
+                errorContainer.appendChild(errorMsg);
+            });
+            document.getElementById("formContainer").appendChild(errorContainer);
+        } else {
+            alert("All data fields in Scheme, Dormat, Interest, and Asset tabs are submitted successfully!");
+        }
+    }
+</script>
+</body>
+</html>
