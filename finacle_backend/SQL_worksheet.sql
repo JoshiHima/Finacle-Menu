@@ -219,7 +219,7 @@ CREATE TABLE dormat_tab (
     created_date DATE DEFAULT SYSDATE
 );
 
-select * from DORMAT_TAB;
+select * from asset_tab;
 
 
 

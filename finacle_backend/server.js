@@ -41,6 +41,7 @@ app.post('/api/save-scheme', async (req, res) => {
     try {
         conn = await oracledb.getConnection(dbConfig);
         const data = req.body;
+        console.log("Received Scheme Data: ", data);
         await conn.execute(
             `INSERT INTO scheme_tab (
                 set_id, nature_of_scheme, additional_calendar_base, expiry_date,
